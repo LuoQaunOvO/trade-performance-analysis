@@ -2,7 +2,7 @@
 """
 Trade Performance Analysis
 对个人衍生品实盘交易记录进行绩效归因分析
-数据: Binance U本位合约成交明细导出CSV
+数据: Bitget U本位合约成交明细导出CSV
 """
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -11,8 +11,8 @@ matplotlib.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei"]
 matplotlib.rcParams["axes.unicode_minus"] = False
 import os
 
-DATA_PATH = r"C:\Users\LuoOVO\Documents\Default Project\导出 U 本位合约成交明细 6124405900-2026-08-10 11_16_02.098.csv"
-OUT_DIR = r"C:\Users\LuoOVO\Documents\Default Project\trade_project"
+DATA_PATH = r"data/导出 U 本位合约成交明细 2026-08-10 11_16_02.098.csv"
+OUT_DIR = r"."
 
 os.makedirs(OUT_DIR, exist_ok=True)
 
