@@ -69,12 +69,21 @@ fig.tight_layout()
 fig.savefig(os.path.join(OUT_DIR, "2_pnl_distribution.png"), dpi=150)
 print("图表2已保存: 2_pnl_distribution.png")
 
-# ---------- 5. 图表3: 按品种盈亏归因 ----------
-by_symbol = closes.groupby("币种")["净盈亏"].sum().sort_values()
+# ---------- 5. 图表3: 按品种盈亏归因(主流资产白名单+其他聚合) ----------
+closes["品种"] = closes["合约"]
+# 白名单: 主流资产(简历口径一致), 其余全部聚合为"其他"
+MAINSTREAM = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "XAUUSDT", "XAGUSDT",
+              "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "LINKUSDT", "AVAXUSDT"]
+by_symbol_all = closes.groupby("品种")["净盈亏"].sum()
+main_symbols = [s for s in MAINSTREAM if s in by_symbol_all.index]
+by_symbol = by_symbol_all[main_symbols].sort_values()
+others_sum = by_symbol_all.drop(main_symbols).sum()
+if others_sum != 0:
+    by_symbol = pd.concat([by_symbol, pd.Series({"其他": others_sum})]).sort_values()
 fig, ax = plt.subplots(figsize=(10, 5))
 colors = ["#d62728" if v < 0 else "#2ca02c" for v in by_symbol.values]
 ax.barh(by_symbol.index, by_symbol.values, color=colors)
-ax.set_title("各品种累计盈亏(USDT)")
+ax.set_title("各品种累计盈亏(USDT, 主流资产+其他)")
 ax.set_xlabel("累计盈亏 (USDT)")
 for i, v in enumerate(by_symbol.values):
     ax.text(v, i, f" {v:.1f}", va="center", fontsize=8)
