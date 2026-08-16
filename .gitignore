@@ -9,6 +9,9 @@ venv/
 data/*.csv
 data/*.xlsx
 
+# 脱敏样本需保留上传
+!data_sample.csv
+
 # 系统
 .DS_Store
 Thumbs.db
