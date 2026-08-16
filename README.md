@@ -139,6 +139,27 @@ trade-performance-analysis/
 ![方向归因](fxreplay_direction_pnl.png)
 ![MFE vs 实际](fxreplay_mfe_vs_actual.png)
 
+## 黑色系商品研究(black_series.py / make_black_report.py)
+
+针对大宗商品贸易岗位的实战研究:以螺纹钢为例,建立"期货价格+现货基差+库存"的基本面跟踪框架。
+
+| 指标 | 数值 | 解读 |
+|------|------|------|
+| 期货主力收盘 | 3015 元/吨 | 价格处于近年低位区间 |
+| 最新基差 | -7 元/吨 | 期货小幅升水 |
+| 基差率 | -0.23% | 接近平水 |
+| 近120日贴水天数占比 | 85% | 期货升水(contango)主导 |
+| 库存 | 34417 | 近30日去库-15993(旺季去库) |
+| 价格-库存相关性 | r=0.59 | 中等正相关,库存可作价格辅助判断 |
+
+**研究结论**:当前处于"库存去化+基差回升"阶段,若去库延续,现货走强可能带动基差转升水,
+是期现正套的观察窗口。交互式报告见 [black_series/black_series_report.html](black_series/black_series_report.html)。
+
+![价格与基差](black_series/rb_price_basis.png)
+![基差率](black_series/rb_basis_rate.png)
+![库存](black_series/rb_inventory.png)
+![价格库存相关性](black_series/rb_price_inv_corr.png)
+
 ## 图表
 
 > 交互式动态报告(鼠标悬停查看数据): **打开 [report.html](report.html) 查看**
@@ -167,8 +188,10 @@ python fxreplay_analysis.py    # FXReplay回测复盘归因分析
 python progress_analysis.py    # 进步轨迹分析(胜率/盈亏比演进)
 python rolling_analysis.py     # 滚动窗口分析(近1月/3月/半年/1年)
 python fee_analysis.py         # 成本结构演进(手续费占比)
+python black_series.py         # 黑色系:螺纹钢基差+库存分析
+python make_black_report.py    # 黑色系交互式报告
 ```
 
 ## 技术栈
 
-Python 3.12 / pandas / matplotlib / pyecharts / CSV
+Python 3.12 / pandas / matplotlib / pyecharts / akshare / CSV
