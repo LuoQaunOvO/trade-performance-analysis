@@ -12,7 +12,8 @@ OUT = r"C:\Users\LuoOVO\Documents\Default Project\trade_project"
 os.makedirs(OUT, exist_ok=True)
 
 df = pd.read_excel(DATA, sheet_name="Trade Log")
-df = df[df["Win/Loss"].notna()]
+# 只统计已平仓且有明确结果的交易(Win/Loss),排除空行与公式错误行(#DIV/0!等)
+df = df[df["Win/Loss"].isin(["Win", "Loss"])]
 df["Final Result(R)"] = pd.to_numeric(df["Final Result(R)"], errors="coerce")
 df["MFE(R)"] = pd.to_numeric(df["MFE(R)"], errors="coerce")
 
