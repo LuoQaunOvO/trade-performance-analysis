@@ -20,6 +20,7 @@ trade-performance-analysis/
 ├── progress_analysis.py   阶段对比(2025上半年 vs 2026)
 ├── rolling_analysis.py    滚动窗口分析(近1月/3月/半年/1年)
 ├── data_sample.csv        脱敏样本数据(历史仓位前60条,格式参考)
+├── position_sizer/        仓位管理工具(风险预算+手续费建模+强平预警)
 ├── report.html            交互式报告成品
 └── requirements.txt       依赖清单
 ```
@@ -179,6 +180,12 @@ trade-performance-analysis/
 ![盈亏分布](2_pnl_distribution.png)
 ![品种归因](3_symbol_pnl.png)
 ![多空对比](4_direction_pnl.png)
+
+## 相关工具:仓位计算器(position_sizer/)
+
+自研仓位管理工具(Python CLI,零依赖):按固定比例风险预算反推每笔仓位,
+纳入双边手续费、合约最小步进与强平距离检查,将"单笔风险1%-2%"的纪律工具化。
+核心公式与使用说明见 [position_sizer/README.md](position_sizer/README.md)。
 
 ## 运行方式
 
