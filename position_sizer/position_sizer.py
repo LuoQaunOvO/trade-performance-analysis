@@ -57,7 +57,7 @@ def load_config():
 
 
 def calc_crypto(total_capital, risk_pct, stop_pct, leverage, fee_pct):
-    """加密货币(带杠杆)：按风险预算反推仓位价值。
+    """加密资产(带杠杆)：按风险预算反推仓位价值。
     手续费按双边计，打止损时总亏损 = 价格止损 + 手续费 = 风险预算。"""
     risk_decimal = risk_pct / 100.0
     stop_decimal = stop_pct / 100.0
@@ -186,7 +186,7 @@ def suggest_crypto_options(total_capital, risk_pct, stop_pct,
 def setup():
     print("\n===== 首次设置 =====")
     try:
-        crypto_capital = float(input("加密货币总资金 (U): ").strip())
+        crypto_capital = float(input("加密资产总资金 (U): ").strip())
         etf_capital = float(input("ETF总资金 (元): ").strip())
         risk = float(input("每笔最大亏损% (默认 0.5): ").strip() or "0.5")
         config = {
@@ -226,7 +226,7 @@ def main():
             return
 
     print("\n选择交易类型:")
-    print("  [1] 加密货币（带杠杆）")
+    print("  [1] 加密资产（带杠杆）")
     print("  [2] ETF（无杠杆，万0.5）")
     mode = input("请输入 (1/2): ").strip()
     while mode not in ("1", "2"):
@@ -252,7 +252,7 @@ def main():
                 return
 
         elif cmd == 'm':
-            label = "加密货币" if mode == "1" else "ETF"
+            label = "加密资产" if mode == "1" else "ETF"
             val = input_float(f"新{label}资金: ")
             if val is None:
                 continue
