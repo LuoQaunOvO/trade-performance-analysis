@@ -215,7 +215,7 @@ h1 {{ text-align: center; color: #222; }}
 </style></head>
 <body><div class="container">
 <h1>交易绩效分析报告</h1>
-<div class="sub">数据范围：2025.01 - 2026.08 &nbsp;|&nbsp; 平仓记录：{len(closes)} 笔 &nbsp;|&nbsp; 数据来源：境外合规平台导出</div>
+<div class="sub">数据范围：{df["时间"].min().date()} - {df["时间"].max().date()}（数据截至 {df["时间"].max().date()}）&nbsp;|&nbsp; 平仓记录：{len(closes)} 笔 &nbsp;|&nbsp; 数据来源：境外合规平台导出</div>
 <div class="cards">
   <div class="card"><div class="num {'red' if total_pnl<0 else 'green'}">{total_pnl:+.2f}</div><div class="lbl">净盈亏 (单位)</div></div>
   <div class="card"><div class="num">{win_rate:.1f}%</div><div class="lbl">胜率</div></div>
