@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""滚动窗口进步分析: 近一年/半年/三个月/一个月 的指标演进"""
+"""滑动窗口进步分析: 近一年/半年/三个月/一个月 的指标演进"""
 import pandas as pd
 import re, glob
 import matplotlib
@@ -50,7 +50,7 @@ for label, days in [("近1个月", 30), ("近3个月", 92), ("近半年", 182), 
     r = metrics(m)
     print(f"{label:<10}{r['笔数']:>5}{r['胜率']:>8.1f}{r['盈亏比']:>8.2f}{r['持仓h']:>10.2f}{r['做空pct']:>7.1f}{r['盈亏']:>10.2f}")
 
-# 滚动3个月窗口(月度滑动)画图
+# 滑动3个月窗口(月度滑动)画图
 pos["月"] = pos["开仓时间"].dt.to_period("M")
 months = sorted(pos["月"].unique())
 roll_win, roll_rr, roll_pnl, roll_labels = [], [], [], []
@@ -64,20 +64,20 @@ for i in range(len(months)):
         roll_labels.append(str(months[i]))
 
 fig, ax1 = plt.subplots(figsize=(11, 5))
-ax1.plot(roll_labels, roll_win, marker="o", color="#1f77b4", label="滚动3月胜率(%)")
+ax1.plot(roll_labels, roll_win, marker="o", color="#1f77b4", label="滑动3月胜率(%)")
 ax1.axhline(50, color="gray", linestyle="--", linewidth=0.8)
 ax1.set_ylabel("胜率 (%)", color="#1f77b4")
 ax2 = ax1.twinx()
-ax2.plot(roll_labels, roll_rr, marker="s", color="#ff7f0e", label="滚动3月盈亏比")
+ax2.plot(roll_labels, roll_rr, marker="s", color="#ff7f0e", label="滑动3月盈亏比")
 ax2.axhline(1.0, color="orange", linestyle="--", linewidth=0.8)
 ax2.set_ylabel("盈亏比", color="#ff7f0e")
 ax1.set_xticks(range(len(roll_labels)))
 ax1.set_xticklabels(roll_labels, rotation=45, fontsize=8)
-ax1.set_title("滚动3个月窗口: 胜率与盈亏比趋势(样本>=10笔)")
+ax1.set_title("滑动3个月窗口: 胜率与盈亏比趋势(样本>=10笔)")
 fig.tight_layout()
 fig.savefig(os.path.join(OUT, "rolling_window_trend.png"), dpi=150)
 print("\n图已保存: rolling_window_trend.png")
 
-print("\n最近5个滚动窗口(仅展示样本>=10笔):")
+print("\n最近5个滑动窗口(仅展示样本>=10笔):")
 for i in range(max(0, len(roll_labels) - 5), len(roll_labels)):
     print(f"  {roll_labels[i]}: 胜率{roll_win[i]}% | 盈亏比{roll_rr[i]}")

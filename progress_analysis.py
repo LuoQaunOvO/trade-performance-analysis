@@ -27,7 +27,7 @@ pos["方向类型"] = pos["合约"].apply(lambda x: "做多" if "Long" in str(x)
 OUT = r"."
 os.makedirs(OUT, exist_ok=True)
 
-# 按月份统计滚动指标
+# 按月份统计滑动指标
 pos["月"] = pos["开仓时间"].dt.to_period("M")
 
 def month_metrics(df):

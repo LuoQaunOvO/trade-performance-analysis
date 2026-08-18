@@ -117,7 +117,7 @@ bar_dist = (
         tooltip_opts=opts.TooltipOpts(trigger="axis"))
 )
 
-# ============ 图6/7: 滚动3个月窗口(完整仓位口径) ============
+# ============ 图6/7: 滑动3个月窗口(完整仓位口径) ============
 def _num(s):
     if s is None or (isinstance(s, float) and pd.isna(s)):
         return 0.0
@@ -147,11 +147,11 @@ for i in range(len(months)):
 line_roll_wr = (
     Line(init_opts=opts.InitOpts(width="1200px", height="340px"))
     .add_xaxis(roll_labels)
-    .add_yaxis("滚动3月胜率(%)", roll_win,
+    .add_yaxis("滑动3月胜率(%)", roll_win,
                is_smooth=True, symbol="circle", symbol_size=6, color="#1f77b4",
                markline_opts=opts.MarkLineOpts(data=[opts.MarkLineItem(y=50, name="50%线")]))
     .set_global_opts(
-        title_opts=opts.TitleOpts(title="滚动3个月窗口: 胜率趋势(样本>=10笔)"),
+        title_opts=opts.TitleOpts(title="滑动3个月窗口: 胜率趋势(样本>=10笔)"),
         datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18), opts.DataZoomOpts(type_="slider", orient="vertical", yaxis_index=0)],
 
         yaxis_opts=opts.AxisOpts(name="胜率(%)", min_=30, max_=75),
@@ -161,11 +161,11 @@ line_roll_wr = (
 line_roll_rr = (
     Line(init_opts=opts.InitOpts(width="1200px", height="340px"))
     .add_xaxis(roll_labels)
-    .add_yaxis("滚动3月盈亏比", roll_rr,
+    .add_yaxis("滑动3月盈亏比", roll_rr,
                is_smooth=True, symbol="diamond", symbol_size=6, color="#ff7f0e",
                markline_opts=opts.MarkLineOpts(data=[opts.MarkLineItem(y=1.0, name="盈亏比1.0")]))
     .set_global_opts(
-        title_opts=opts.TitleOpts(title="滚动3个月窗口: 盈亏比趋势(样本>=10笔)"),
+        title_opts=opts.TitleOpts(title="滑动3个月窗口: 盈亏比趋势(样本>=10笔)"),
         datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18), opts.DataZoomOpts(type_="slider", orient="vertical", yaxis_index=0)],
 
         yaxis_opts=opts.AxisOpts(name="盈亏比", min_=0, max_=2),
@@ -175,11 +175,11 @@ line_roll_rr = (
 bar_roll = (
     Bar(init_opts=opts.InitOpts(width="1200px", height="320px"))
     .add_xaxis(roll_labels)
-    .add_yaxis("滚动3月盈亏", [round(v, 2) for v in roll_pnl],
+    .add_yaxis("滑动3月盈亏", [round(v, 2) for v in roll_pnl],
                itemstyle_opts=opts.ItemStyleOpts(
                    color=JsCode("params => params.value >= 0 ? '#2ca02c' : '#d62728'")))
     .set_global_opts(
-        title_opts=opts.TitleOpts(title="滚动3月盈亏(单位)"),
+        title_opts=opts.TitleOpts(title="滑动3月盈亏(单位)"),
         datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18), opts.DataZoomOpts(type_="slider", orient="vertical", yaxis_index=0)],
 
         yaxis_opts=opts.AxisOpts(name="盈亏 (单位)", splitline_opts=opts.SplitLineOpts(is_show=True)),
@@ -235,7 +235,7 @@ html_foot = f"""<div class="conclusion">
 <p><b>2. 交易成本过高</b>：累计手续费 {total_fee:.2f} 单位，占净亏损的 {abs(total_fee/total_pnl)*100:.0f}%，过度交易侵蚀利润。</p>
 <p><b>3. 方向性差异显著</b>：做多累计 {dir_pnl.get('做多',0):+.1f} 单位 vs 做空 {dir_pnl.get('做空',0):+.1f} 单位，做多为主要亏损来源。</p>
 <p><b>4. 风控纪律有效</b>：前期爆仓 3 次后，连续 19 个月零爆仓，未出现单次大额亏损失控。</p>
-<p><b>5. 改进验证（滚动窗口）</b>：盈亏比从 0.39 修复至 0.79、总亏损收窄 89%——改善来自可量化的策略调整，而非运气。</p>
+<p><b>5. 改进验证（滑动窗口）</b>：盈亏比从 0.39 修复至 0.79、总亏损收窄 89%——改善来自可量化的策略调整，而非运气。</p>
 </div>
 </div></body></html>"""
 

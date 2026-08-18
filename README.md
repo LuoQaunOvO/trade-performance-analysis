@@ -18,7 +18,7 @@ trade-performance-analysis/
 ├── position_analysis.py   完整仓位级分析(开平配对/资金费用/真实持仓时长)
 ├── fxreplay_analysis.py   FXReplay回测复盘归因(独立数据交叉验证)
 ├── progress_analysis.py   阶段对比(2025上半年 vs 2026)
-├── rolling_analysis.py    滚动窗口分析(近1月/3月/半年/1年)
+├── rolling_analysis.py    滑动窗口分析(近1月/3月/半年/1年)
 ├── data_sample.csv        脱敏样本数据(历史仓位前60条,格式参考)
 ├── position_sizer/        仓位管理工具(风险预算+手续费建模+强平预警)
 ├── report.html            交互式报告成品
@@ -67,9 +67,9 @@ trade-performance-analysis/
 **关键结论**:盈亏比(盈利单持有)与交易时段选择是可量化的改进方向,
 改进模拟显示修复盈亏比可使亏损降低 65%,这是后续迭代的核心目标。
 
-## 滚动窗口分析(rolling_analysis.py)
+## 滑动窗口分析(rolling_analysis.py)
 
-用滚动时间窗口(近1月/3月/半年/1年)追踪指标演进,区分"历史问题"与"当前状态"。
+用滑动时间窗口(近1月/3月/半年/1年)追踪指标演进,区分"历史问题"与"当前状态"。
 
 | 窗口 | 笔数 | 胜率 | 盈亏比 | 盈亏(单位) |
 |------|------|------|--------|-----------|
@@ -82,7 +82,7 @@ trade-performance-analysis/
 **关键结论**:总亏损的89%集中于2025上半年(高频乱做期),
 近一年盈亏比已从0.53修复至0.79,亏损收窄89%——体系改善是真实的、可量化的。
 
-![滚动窗口趋势](rolling_window_trend.png)
+![滑动窗口趋势](rolling_window_trend.png)
 
 ## 成本结构演进(手续费占比)
 
@@ -209,7 +209,7 @@ python deep_analysis.py        # 深度分析(回撤/连亏/星期效应/时段�
 python position_analysis.py    # 完整仓位级分析(开平配对/资金费用/持仓时长)
 python fxreplay_analysis.py    # FXReplay回测复盘归因分析
 python progress_analysis.py    # 进步轨迹分析(胜率/盈亏比演进)
-python rolling_analysis.py     # 滚动窗口分析(近1月/3月/半年/1年)
+python rolling_analysis.py     # 滑动窗口分析(近1月/3月/半年/1年)
 python fee_analysis.py         # 成本结构演进(手续费占比)
 python black_series.py         # 黑色系:螺纹钢基差+库存分析
 python make_black_report.py    # 黑色系交互式报告
