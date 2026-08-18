@@ -2,7 +2,7 @@
 """
 Trade Performance Analysis
 对个人衍生品实盘交易记录进行绩效归因分析
-数据: Bitget U本位合约成交明细导出CSV
+数据: 境外合规平台成交明细导出CSV
 """
 import pandas as pd
 import matplotlib.pyplot as plt
