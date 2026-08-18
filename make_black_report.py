@@ -212,6 +212,9 @@ if inv is not None:
                 tooltip_opts=opts.TooltipOpts(trigger="item"))
         )
         charts.append(scat)
+        charts.append(("<div style='padding:6px 4px 14px;font-size:12px;color:#888;'>"
+                       f"读图说明：每个点=某天的(库存,价格)配对；r={corr:.2f}为中等正相关——库存高时价格通常也偏高，"
+                       "反映贸易商\"涨价补库、跌价去库\"的库存行为，库存可作为价格方向的辅助参考（相关≠因果）。</div>"))
 
 # ============ HTML ============
 arb_html = ""
@@ -254,7 +257,7 @@ th {{ background: #f0f2f5; }}
 </div>
 """
 
-charts_html = "".join(f'<div class="chart">{c.render_embed()}</div>' for c in charts)
+charts_html = "".join(c if isinstance(c, str) else f'<div class="chart">{c.render_embed()}</div>' for c in charts)
 
 html_foot = f"""<div class="conclusion">
 <h2>正套损益测算(买入现货+卖出期货)</h2>
