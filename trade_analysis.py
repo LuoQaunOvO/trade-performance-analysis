@@ -37,8 +37,8 @@ losses = closes[closes["净盈亏"] < 0]["净盈亏"]
 profit_factor = abs(wins.sum() / losses.sum()) if losses.sum() else float("inf")
 
 print("=" * 50)
-print(f"净盈亏(扣费): {total_pnl:+.2f} USDT")
-print(f"手续费: {total_fee:.2f} USDT")
+print(f"净盈亏(扣费): {total_pnl:+.2f} 单位")
+print(f"手续费: {total_fee:.2f} 单位")
 print(f"胜率: {win_rate:.1f}%")
 print(f"平均盈利: {wins.mean():+.3f} | 平均亏损: {losses.mean():+.3f} | 盈亏比: {abs(wins.mean()/losses.mean()):.2f}")
 print(f"盈亏因子(Profit Factor): {profit_factor:.2f}")
@@ -49,9 +49,9 @@ monthly = closes.groupby("月")["净盈亏"].sum().cumsum()
 fig, ax = plt.subplots(figsize=(10, 5))
 ax.plot(monthly.index.astype(str), monthly.values, marker="o", linewidth=2)
 ax.axhline(0, color="gray", linestyle="--", linewidth=1)
-ax.set_title("月度累计净盈亏曲线(USDT)")
+ax.set_title("月度累计净盈亏曲线(单位)")
 ax.set_xlabel("月份")
-ax.set_ylabel("累计净盈亏 (USDT)")
+ax.set_ylabel("累计净盈亏 (单位)")
 ax.tick_params(axis="x", rotation=45)
 fig.tight_layout()
 fig.savefig(os.path.join(OUT_DIR, "1_monthly_equity.png"), dpi=150)
@@ -62,7 +62,7 @@ fig, ax = plt.subplots(figsize=(10, 5))
 bins = pd.cut(closes["净盈亏"], bins=40).value_counts().sort_index()
 ax.bar([str(b) for b in bins.index], bins.values, width=0.8)
 ax.set_title("单笔交易盈亏分布")
-ax.set_xlabel("单笔净盈亏区间 (USDT)")
+ax.set_xlabel("单笔净盈亏区间 (单位)")
 ax.set_ylabel("笔数")
 ax.tick_params(axis="x", rotation=90, labelsize=8)
 fig.tight_layout()
@@ -72,8 +72,8 @@ print("图表2已保存: 2_pnl_distribution.png")
 # ---------- 5. 图表3: 按品种盈亏归因(主流资产白名单+其他聚合) ----------
 closes["品种"] = closes["合约"]
 # 白名单: 主流资产(简历口径一致), 其余全部聚合为"其他"
-MAINSTREAM = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "XAUUSDT", "XAGUSDT",
-              "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "LINKUSDT", "AVAXUSDT"]
+MAINSTREAM = ["BTC单位", "ETH单位", "SOL单位", "XAU单位", "XAG单位",
+              "BNB单位", "XRP单位", "ADA单位", "DOGE单位", "LINK单位", "AVAX单位"]
 by_symbol_all = closes.groupby("品种")["净盈亏"].sum()
 main_symbols = [s for s in MAINSTREAM if s in by_symbol_all.index]
 by_symbol = by_symbol_all[main_symbols].sort_values()
@@ -83,8 +83,8 @@ if others_sum != 0:
 fig, ax = plt.subplots(figsize=(10, 5))
 colors = ["#d62728" if v < 0 else "#2ca02c" for v in by_symbol.values]
 ax.barh(by_symbol.index, by_symbol.values, color=colors)
-ax.set_title("各品种累计盈亏(USDT, 主流资产+其他)")
-ax.set_xlabel("累计盈亏 (USDT)")
+ax.set_title("各品种累计盈亏(单位, 主流资产+其他)")
+ax.set_xlabel("累计盈亏 (单位)")
 for i, v in enumerate(by_symbol.values):
     ax.text(v, i, f" {v:.1f}", va="center", fontsize=8)
 fig.tight_layout()
@@ -98,16 +98,16 @@ fig, ax = plt.subplots(figsize=(6, 5))
 ax.bar(dir_pnl.index, dir_pnl.values, color=["#d62728", "#2ca02c"])
 for i, v in enumerate(dir_pnl.values):
     ax.text(i, v, f" {v:.1f}", ha="center", va="bottom" if v > 0 else "top")
-ax.set_title("多空方向盈亏对比(USDT)")
-ax.set_ylabel("累计盈亏 (USDT)")
+ax.set_title("多空方向盈亏对比(单位)")
+ax.set_ylabel("累计盈亏 (单位)")
 fig.tight_layout()
 fig.savefig(os.path.join(OUT_DIR, "4_direction_pnl.png"), dpi=150)
 print("图表4已保存: 4_direction_pnl.png")
 
 # ---------- 7. 汇总指标导出 ----------
 summary = pd.DataFrame({
-    "指标": ["总成交记录", "平仓笔数", "时间范围", "净盈亏(USDT)", "手续费(USDT)",
-             "胜率(%)", "平均盈利(USDT)", "平均亏损(USDT)", "盈亏比", "盈亏因子"],
+    "指标": ["总成交记录", "平仓笔数", "时间范围", "净盈亏(单位)", "手续费(单位)",
+             "胜率(%)", "平均盈利(单位)", "平均亏损(单位)", "盈亏比", "盈亏因子"],
     "数值": [len(df), len(closes), f"{df['时间'].min().date()} ~ {df['时间'].max().date()}",
              round(total_pnl, 2), round(total_fee, 2), round(win_rate, 1),
              round(wins.mean(), 3), round(losses.mean(), 3),

@@ -34,9 +34,9 @@ line = (
                    data=[opts.MarkPointItem(type_="max", name="最高点"), opts.MarkPointItem(type_="min", name="最低点")]),
                markline_opts=opts.MarkLineOpts(data=[opts.MarkLineItem(y=0, name="盈亏平衡线")]))
     .set_global_opts(
-        title_opts=opts.TitleOpts(title="月度累计净盈亏(USDT)"),
-        yaxis_opts=opts.AxisOpts(name="累计盈亏 (USDT)", splitline_opts=opts.SplitLineOpts(is_show=True)),
-        tooltip_opts=opts.TooltipOpts(trigger="axis", formatter=JsCode("params => params[0].axisValue + '<br/>累计盈亏: ' + params[0].value + ' USDT'"))
+        title_opts=opts.TitleOpts(title="月度累计净盈亏(单位)"),
+        yaxis_opts=opts.AxisOpts(name="累计盈亏 (单位)", splitline_opts=opts.SplitLineOpts(is_show=True)),
+        tooltip_opts=opts.TooltipOpts(trigger="axis", formatter=JsCode("params => params[0].axisValue + '<br/>累计盈亏: ' + params[0].value + ' 单位'"))
     )
 )
 
@@ -49,14 +49,14 @@ bar_month = (
                itemstyle_opts=opts.ItemStyleOpts(
                    color=JsCode("params => params.value >= 0 ? '#2ca02c' : '#d62728'")))
     .set_global_opts(
-        title_opts=opts.TitleOpts(title="月度盈亏(USDT)"),
-        yaxis_opts=opts.AxisOpts(name="盈亏 (USDT)", splitline_opts=opts.SplitLineOpts(is_show=True)),
+        title_opts=opts.TitleOpts(title="月度盈亏(单位)"),
+        yaxis_opts=opts.AxisOpts(name="盈亏 (单位)", splitline_opts=opts.SplitLineOpts(is_show=True)),
         tooltip_opts=opts.TooltipOpts(trigger="axis"))
 )
 
 # ============ 图3: 品种盈亏(横向条形, 主流资产白名单+其他聚合) ============
-MAINSTREAM = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "XAUUSDT", "XAGUSDT",
-              "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "LINKUSDT", "AVAXUSDT"]
+MAINSTREAM = ["BTC单位", "ETH单位", "SOL单位", "XAU单位", "XAG单位",
+              "BNB单位", "XRP单位", "ADA单位", "DOGE单位", "LINK单位", "AVAX单位"]
 by_symbol_all = closes.groupby("币种")["净盈亏"].sum()
 main_symbols = [s for s in MAINSTREAM if s in by_symbol_all.index]
 by_symbol = by_symbol_all[main_symbols].sort_values()
@@ -72,7 +72,7 @@ bar_sym = (
     .set_global_opts(
         title_opts=opts.TitleOpts(title="各品种累计盈亏(主流资产+其他)"),
         xaxis_opts=opts.AxisOpts(name="品种"),
-        yaxis_opts=opts.AxisOpts(name="累计盈亏 (USDT)", splitline_opts=opts.SplitLineOpts(is_show=True)),
+        yaxis_opts=opts.AxisOpts(name="累计盈亏 (单位)", splitline_opts=opts.SplitLineOpts(is_show=True)),
         tooltip_opts=opts.TooltipOpts(trigger="axis"))
     .reversal_axis()
 )
@@ -87,8 +87,8 @@ bar_dir = (
                itemstyle_opts=opts.ItemStyleOpts(
                    color=JsCode("params => params.value >= 0 ? '#2ca02c' : '#d62728'")))
     .set_global_opts(
-        title_opts=opts.TitleOpts(title="多空方向盈亏对比(USDT)"),
-        yaxis_opts=opts.AxisOpts(name="累计盈亏 (USDT)", splitline_opts=opts.SplitLineOpts(is_show=True)),
+        title_opts=opts.TitleOpts(title="多空方向盈亏对比(单位)"),
+        yaxis_opts=opts.AxisOpts(name="累计盈亏 (单位)", splitline_opts=opts.SplitLineOpts(is_show=True)),
         tooltip_opts=opts.TooltipOpts(trigger="axis"))
 )
 
@@ -136,20 +136,20 @@ h1 {{ text-align: center; color: #222; }}
 <h1>交易绩效分析报告</h1>
 <div class="sub">数据范围：2025.01 - 2026.08 &nbsp;|&nbsp; 平仓记录：{len(closes)} 笔 &nbsp;|&nbsp; 数据来源：Bitget U本位合约成交明细</div>
 <div class="cards">
-  <div class="card"><div class="num {'red' if total_pnl<0 else 'green'}">{total_pnl:+.2f}</div><div class="lbl">净盈亏 (USDT)</div></div>
+  <div class="card"><div class="num {'red' if total_pnl<0 else 'green'}">{total_pnl:+.2f}</div><div class="lbl">净盈亏 (单位)</div></div>
   <div class="card"><div class="num">{win_rate:.1f}%</div><div class="lbl">胜率</div></div>
   <div class="card"><div class="num">{abs(avg_win/avg_loss):.2f}</div><div class="lbl">盈亏比</div></div>
   <div class="card"><div class="num">{pf:.2f}</div><div class="lbl">盈亏因子</div></div>
-  <div class="card"><div class="num red">{total_fee:.2f}</div><div class="lbl">手续费 (USDT)</div></div>
+  <div class="card"><div class="num red">{total_fee:.2f}</div><div class="lbl">手续费 (单位)</div></div>
   <div class="card"><div class="num">{len(closes)}</div><div class="lbl">平仓笔数</div></div>
 </div>
 """
 
 html_foot = f"""<div class="conclusion">
 <h2>核心发现</h2>
-<p><b>1. 盈亏比失衡是亏损主因</b>：胜率 {win_rate:.1f}%（{len(wins)}胜/{len(losses)}负），但平均盈利 {avg_win:+.3f} USDT vs 平均亏损 {avg_loss:+.3f} USDT，盈利单持有不足（赚小亏大）。</p>
-<p><b>2. 交易成本过高</b>：累计手续费 {total_fee:.2f} USDT，占净亏损的 {abs(total_fee/total_pnl)*100:.0f}%，过度交易侵蚀利润。</p>
-<p><b>3. 方向性差异显著</b>：做多累计 {dir_pnl.get('做多',0):+.1f} USDT vs 做空 {dir_pnl.get('做空',0):+.1f} USDT，做多为主要亏损来源。</p>
+<p><b>1. 盈亏比失衡是亏损主因</b>：胜率 {win_rate:.1f}%（{len(wins)}胜/{len(losses)}负），但平均盈利 {avg_win:+.3f} 单位 vs 平均亏损 {avg_loss:+.3f} 单位，盈利单持有不足（赚小亏大）。</p>
+<p><b>2. 交易成本过高</b>：累计手续费 {total_fee:.2f} 单位，占净亏损的 {abs(total_fee/total_pnl)*100:.0f}%，过度交易侵蚀利润。</p>
+<p><b>3. 方向性差异显著</b>：做多累计 {dir_pnl.get('做多',0):+.1f} 单位 vs 做空 {dir_pnl.get('做空',0):+.1f} 单位，做多为主要亏损来源。</p>
 <p><b>4. 风控纪律有效</b>：前期爆仓 3 次后，连续 19 个月零爆仓，未出现单次大额亏损失控。</p>
 </div>
 </div></body></html>"""
