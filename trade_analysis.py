@@ -72,8 +72,8 @@ print("图表2已保存: 2_pnl_distribution.png")
 # ---------- 5. 图表3: 按品种盈亏归因(主流资产白名单+其他聚合) ----------
 closes["品种"] = closes["合约"]
 # 白名单: 主流资产(简历口径一致), 其余全部聚合为"其他"
-MAINSTREAM = ["BTC单位", "ETH单位", "SOL单位", "XAU单位", "XAG单位",
-              "BNB单位", "XRP单位", "ADA单位", "DOGE单位", "LINK单位", "AVAX单位"]
+MAINSTREAM = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "XAUUSDT", "XAGUSDT",
+              "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "LINKUSDT", "AVAXUSDT"]
 by_symbol_all = closes.groupby("品种")["净盈亏"].sum()
 main_symbols = [s for s in MAINSTREAM if s in by_symbol_all.index]
 by_symbol = by_symbol_all[main_symbols].sort_values()
