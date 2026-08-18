@@ -115,7 +115,7 @@ line_price = (
                is_smooth=True, symbol="none", color="#1f77b4")
     .set_global_opts(
         title_opts=opts.TitleOpts(title="螺纹钢期货主力收盘价(2025-2026)"),
-        datazoom_opts=[opts.DataZoomOpts(range_start=0, range_end=100)],
+        datazoom_opts=[opts.DataZoomOpts(range_start=0, range_end=100), opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="inside", orient="vertical", yaxis_index=0)],
         xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=45, interval=20, font_size=9)),
         yaxis_opts=opts.AxisOpts(name="元/吨", splitline_opts=opts.SplitLineOpts(is_show=True)),
         tooltip_opts=opts.TooltipOpts(trigger="axis"))
@@ -129,7 +129,7 @@ line_basis = (
                    color=JsCode("params => params.value >= 0 ? '#2ca02c' : '#d62728'")))
     .set_global_opts(
         title_opts=opts.TitleOpts(title="螺纹钢基差(现货-期货主力)"),
-        datazoom_opts=[opts.DataZoomOpts(range_start=0, range_end=100)],
+        datazoom_opts=[opts.DataZoomOpts(range_start=0, range_end=100), opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="inside", orient="vertical", yaxis_index=0)],
         xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=45, interval=10, font_size=9)),
         yaxis_opts=opts.AxisOpts(name="元/吨", splitline_opts=opts.SplitLineOpts(is_show=True)),
         tooltip_opts=opts.TooltipOpts(trigger="axis"))
@@ -144,7 +144,7 @@ line_rate = (
                                                      opts.MarkLineItem(y=float(last_rate * 100), name=f"当前 {last_rate*100:+.2f}% ({pct:.0f}%分位)")]))
     .set_global_opts(
         title_opts=opts.TitleOpts(title=f"螺纹钢基差率走势(当前处于近{len(basis)}日{pct:.0f}%分位)"),
-        datazoom_opts=[opts.DataZoomOpts(range_start=0, range_end=100)],
+        datazoom_opts=[opts.DataZoomOpts(range_start=0, range_end=100), opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="inside", orient="vertical", yaxis_index=0)],
         xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=45, interval=10, font_size=9)),
         yaxis_opts=opts.AxisOpts(name="%", splitline_opts=opts.SplitLineOpts(is_show=True)),
         tooltip_opts=opts.TooltipOpts(trigger="axis"))
@@ -159,6 +159,7 @@ hist_basis = (
                itemstyle_opts=opts.ItemStyleOpts(color="#9467bd"))
     .set_global_opts(
         title_opts=opts.TitleOpts(title=f"基差率分布(近{len(basis)}日,当前{last_rate*100:+.2f}% 处于{pct:.0f}%分位)"),
+        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="inside", orient="vertical", yaxis_index=0)],
         xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=45, font_size=9)),
         yaxis_opts=opts.AxisOpts(name="天数", splitline_opts=opts.SplitLineOpts(is_show=True)),
         tooltip_opts=opts.TooltipOpts(trigger="axis"))
@@ -173,7 +174,7 @@ line_profit = (
                                                      opts.MarkLineItem(y=float(last_profit), name=f"当前 {last_profit:+.0f}")]))
     .set_global_opts(
         title_opts=opts.TitleOpts(title="螺纹钢盘面利润估算(螺纹-1.6×铁矿-0.45×焦炭-加工费)"),
-        datazoom_opts=[opts.DataZoomOpts(range_start=0, range_end=100)],
+        datazoom_opts=[opts.DataZoomOpts(range_start=0, range_end=100), opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="inside", orient="vertical", yaxis_index=0)],
         xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=45, interval=20, font_size=9)),
         yaxis_opts=opts.AxisOpts(name="元/吨", splitline_opts=opts.SplitLineOpts(is_show=True)),
         tooltip_opts=opts.TooltipOpts(trigger="axis"))
@@ -188,7 +189,7 @@ if inv is not None:
                    is_smooth=True, color="#d62728", symbol="circle", symbol_size=5)
         .set_global_opts(
             title_opts=opts.TitleOpts(title="螺纹钢库存走势"),
-            datazoom_opts=[opts.DataZoomOpts(range_start=0, range_end=100)],
+            datazoom_opts=[opts.DataZoomOpts(range_start=0, range_end=100), opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="inside", orient="vertical", yaxis_index=0)],
             xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=45, interval=6, font_size=9)),
             yaxis_opts=opts.AxisOpts(name="库存", splitline_opts=opts.SplitLineOpts(is_show=True)),
             tooltip_opts=opts.TooltipOpts(trigger="axis"))
@@ -199,12 +200,14 @@ if inv is not None:
         corr = merged["收盘价"].corr(merged["库存"])
         scat = (
             Scatter(init_opts=opts.InitOpts(width="1200px", height="380px"))
-            .add_xaxis([round(float(v), 0) for v in merged["库存"]])
-            .add_yaxis("收盘价(元/吨)", [round(float(v), 1) for v in merged["收盘价"]],
+            .add_xaxis([str(round(float(v), 0)) for v in merged["库存"]])
+            .add_yaxis("收盘价(元/吨)",
+                       [[round(float(x), 0), round(float(y), 1)] for x, y in zip(merged["库存"], merged["收盘价"])],
                        symbol_size=8, color="#1f77b4")
             .set_global_opts(
                 title_opts=opts.TitleOpts(title=f"螺纹钢价格与库存相关性 (r={corr:.2f})"),
-                xaxis_opts=opts.AxisOpts(name="库存", splitline_opts=opts.SplitLineOpts(is_show=True)),
+                datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="inside", orient="vertical", yaxis_index=0)],
+                xaxis_opts=opts.AxisOpts(name="库存", type_="value", splitline_opts=opts.SplitLineOpts(is_show=True)),
                 yaxis_opts=opts.AxisOpts(name="收盘价(元/吨)", splitline_opts=opts.SplitLineOpts(is_show=True)),
                 tooltip_opts=opts.TooltipOpts(trigger="item"))
         )

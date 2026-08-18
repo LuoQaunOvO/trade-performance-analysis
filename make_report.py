@@ -63,7 +63,7 @@ bar_month = (
 # ============ 图3: 品种盈亏(横向条形, 主流资产白名单+其他聚合) ============
 MAINSTREAM = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "XAUUSDT", "XAGUSDT",
               "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "LINKUSDT", "AVAXUSDT"]
-by_symbol_all = closes.groupby("币种")["净盈亏"].sum()
+by_symbol_all = closes.groupby("合约")["净盈亏"].sum()
 main_symbols = [s for s in MAINSTREAM if s in by_symbol_all.index]
 by_symbol = by_symbol_all[main_symbols].sort_values()
 others_sum = by_symbol_all.drop(main_symbols).sum()
