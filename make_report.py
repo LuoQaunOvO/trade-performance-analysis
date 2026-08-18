@@ -54,8 +54,15 @@ bar_month = (
         tooltip_opts=opts.TooltipOpts(trigger="axis"))
 )
 
-# ============ 图3: 品种盈亏(横向条形) ============
-by_symbol = closes.groupby("币种")["净盈亏"].sum().sort_values()
+# ============ 图3: 品种盈亏(横向条形, 主流资产白名单+其他聚合) ============
+MAINSTREAM = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "XAUUSDT", "XAGUSDT",
+              "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "LINKUSDT", "AVAXUSDT"]
+by_symbol_all = closes.groupby("币种")["净盈亏"].sum()
+main_symbols = [s for s in MAINSTREAM if s in by_symbol_all.index]
+by_symbol = by_symbol_all[main_symbols].sort_values()
+others_sum = by_symbol_all.drop(main_symbols).sum()
+if others_sum != 0:
+    by_symbol = pd.concat([by_symbol, pd.Series({"其他": others_sum})]).sort_values()
 bar_sym = (
     Bar(init_opts=opts.InitOpts(width="1200px", height="420px"))
     .add_xaxis([str(s) for s in by_symbol.index])
@@ -63,7 +70,7 @@ bar_sym = (
                itemstyle_opts=opts.ItemStyleOpts(
                    color=JsCode("params => params.value >= 0 ? '#2ca02c' : '#d62728'")))
     .set_global_opts(
-        title_opts=opts.TitleOpts(title="各品种累计盈亏(USDT)"),
+        title_opts=opts.TitleOpts(title="各品种累计盈亏(主流资产+其他)"),
         xaxis_opts=opts.AxisOpts(name="品种"),
         yaxis_opts=opts.AxisOpts(name="累计盈亏 (USDT)", splitline_opts=opts.SplitLineOpts(is_show=True)),
         tooltip_opts=opts.TooltipOpts(trigger="axis"))
