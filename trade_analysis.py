@@ -115,6 +115,8 @@ summary = pd.DataFrame({
 })
 summary.to_csv(os.path.join(OUT_DIR, "summary.csv"), index=False, encoding="utf-8-sig")
 monthly.to_frame("累计净盈亏").to_csv(os.path.join(OUT_DIR, "monthly_cum_pnl.csv"), encoding="utf-8-sig")
-by_symbol.to_frame("净盈亏").to_csv(os.path.join(OUT_DIR, "symbol_pnl.csv"), encoding="utf-8-sig")
+_disp_pnl = by_symbol.copy()
+_disp_pnl.index = [str(x).replace("USDT", "") if str(x).endswith("USDT") else str(x) for x in _disp_pnl.index]
+_disp_pnl.to_frame("净盈亏").to_csv(os.path.join(OUT_DIR, "symbol_pnl.csv"), encoding="utf-8-sig")
 
 print("\n全部完成, 输出目录:", OUT_DIR)

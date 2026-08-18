@@ -22,7 +22,7 @@ print("1. 最大回撤(按月度累计净值)")
 cum = closes.groupby("月")["净盈亏"].sum().cumsum().values
 peak = np.maximum.accumulate(cum)
 dd = cum - peak
-print(f"   最大回撤: {dd.min():.2f} USDT, 发生在月度序列第{np.argmin(dd)+1}个月(相对最高点)")
+print(f"   最大回撤: {dd.min():.2f} 单位, 发生在月度序列第{np.argmin(dd)+1}个月(相对最高点)")
 
 print("\n2. 连续盈利/连续亏损(单笔)")
 streak = 0
@@ -39,14 +39,14 @@ print(f"   最长连续盈利: {max_win_streak} 笔 | 最长连续亏损: {max_l
 
 print("\n3. 期望值")
 exp = pnl.mean()
-print(f"   单笔期望收益: {exp:+.4f} USDT")
+print(f"   单笔期望收益: {exp:+.4f} 单位")
 
 print("\n4. 星期效应")
 week = closes.groupby("星期")["净盈亏"].sum()
 week_name = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
 for i, v in week.items():
     n = (closes["星期"] == i).sum()
-    print(f"   {week_name[i]}: {v:+.2f} USDT ({n}笔)")
+    print(f"   {week_name[i]}: {v:+.2f} 单位 ({n}笔)")
 
 print("\n5. 时段效应(小时分布)")
 hour = closes.groupby("小时")["净盈亏"].sum()
@@ -82,8 +82,8 @@ risk = pd.to_numeric(closes["净盈亏"], errors="coerce").values
 r_losses = risk[risk < 0]
 r_wins = risk[risk > 0]
 print(f"   亏损笔占总笔数: {len(r_losses)/len(closes)*100:.1f}%")
-print(f"   小额亏损(0~-2 USDT)占比: {len(r_losses[(r_losses > -2)])/len(closes)*100:.1f}%")
+print(f"   小额亏损(0~-2 单位)占比: {len(r_losses[(r_losses > -2)])/len(closes)*100:.1f}%")
 
 print("\n8. 若改进盈亏比到1.5(模拟): 盈亏同比例调整")
 sim = np.where(pnl > 0, pnl * 1.5, pnl)
-print(f"   原总盈亏: {pnl.sum():+.2f} -> 模拟盈亏: {sim.sum():+.2f} USDT")
+print(f"   原总盈亏: {pnl.sum():+.2f} -> 模拟盈亏: {sim.sum():+.2f} 单位")

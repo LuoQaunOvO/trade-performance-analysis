@@ -24,9 +24,9 @@ print("完整仓位分析(开平配对)")
 print(f"仓位总数: {len(pos)} | 时间范围: {pos['开仓时间'].min()} ~ {pos['开仓时间'].max()}")
 
 print("\n1. 盈亏全景")
-print(f"   仓位盈亏合计: {pos['仓位盈亏'].sum():+.2f} USDT")
-print(f"   已实现盈亏: {pos['已实现盈亏'].sum():+.2f} USDT")
-print(f"   资金费用(过夜成本): {pos['资金费用'].sum():+.2f} USDT")
+print(f"   仓位盈亏合计: {pos['仓位盈亏'].sum():+.2f} 单位")
+print(f"   已实现盈亏: {pos['已实现盈亏'].sum():+.2f} 单位")
+print(f"   资金费用(过夜成本): {pos['资金费用'].sum():+.2f} 单位")
 print(f"   开仓手续费: {pos['开仓手续费'].sum():.2f} | 平仓手续费: {pos['平仓手续费'].sum():.2f}")
 print(f"   总成本(手续费+资金费用): {pos['开仓手续费'].sum()+pos['平仓手续费'].sum()+pos['资金费用'].sum():.2f}")
 

@@ -84,8 +84,8 @@ print("\n图1已保存: progress_winrate_rr.png")
 # ============ 图2: 月度盈亏柱状+做空占比 ============
 fig, ax1 = plt.subplots(figsize=(11, 5))
 colors = ["#d62728" if v < 0 else "#2ca02c" for v in metrics["月盈亏"]]
-ax1.bar(range(len(idx)), metrics["月盈亏"], color=colors, alpha=0.7, label="月度盈亏(USDT)")
-ax1.set_ylabel("月度盈亏 (USDT)")
+ax1.bar(range(len(idx)), metrics["月盈亏"], color=colors, alpha=0.7, label="月度盈亏(单位)")
+ax1.set_ylabel("月度盈亏 (单位)")
 ax1.set_xticks(range(len(idx)))
 ax1.set_xticklabels(idx, rotation=45, fontsize=8)
 ax2 = ax1.twinx()
