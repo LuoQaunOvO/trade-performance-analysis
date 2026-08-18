@@ -37,7 +37,7 @@ line = (
                markline_opts=opts.MarkLineOpts(data=[opts.MarkLineItem(y=0, name="盈亏平衡线")]))
     .set_global_opts(
         title_opts=opts.TitleOpts(title="月度累计净盈亏(单位)"),
-        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18)],
+        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18), opts.DataZoomOpts(type_="slider", orient="vertical", yaxis_index=0)],
 
         yaxis_opts=opts.AxisOpts(name="累计盈亏 (单位)", splitline_opts=opts.SplitLineOpts(is_show=True)),
         tooltip_opts=opts.TooltipOpts(trigger="axis", formatter=JsCode("params => params[0].axisValue + '<br/>累计盈亏: ' + params[0].value + ' 单位'"))
@@ -54,7 +54,7 @@ bar_month = (
                    color=JsCode("params => params.value >= 0 ? '#2ca02c' : '#d62728'")))
     .set_global_opts(
         title_opts=opts.TitleOpts(title="月度盈亏(单位)"),
-        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18)],
+        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18), opts.DataZoomOpts(type_="slider", orient="vertical", yaxis_index=0)],
 
         yaxis_opts=opts.AxisOpts(name="盈亏 (单位)", splitline_opts=opts.SplitLineOpts(is_show=True)),
         tooltip_opts=opts.TooltipOpts(trigger="axis"))
@@ -69,15 +69,16 @@ by_symbol = by_symbol_all[main_symbols].sort_values()
 others_sum = by_symbol_all.drop(main_symbols).sum()
 if others_sum != 0:
     by_symbol = pd.concat([by_symbol, pd.Series({"其他": others_sum})]).sort_values()
+_disp = [str(s).replace("USDT", "") if str(s).endswith("USDT") else str(s) for s in by_symbol.index]
 bar_sym = (
     Bar(init_opts=opts.InitOpts(width="1200px", height="420px"))
-    .add_xaxis([str(s) for s in by_symbol.index])
+    .add_xaxis(_disp)
     .add_yaxis("累计盈亏", [round(v, 2) for v in by_symbol.values],
                itemstyle_opts=opts.ItemStyleOpts(
                    color=JsCode("params => params.value >= 0 ? '#2ca02c' : '#d62728'")))
     .set_global_opts(
         title_opts=opts.TitleOpts(title="各品种累计盈亏(主流资产+其他)"),
-        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18)],
+        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18), opts.DataZoomOpts(type_="slider", orient="vertical", yaxis_index=0)],
 
         xaxis_opts=opts.AxisOpts(name="品种"),
         yaxis_opts=opts.AxisOpts(name="累计盈亏 (单位)", splitline_opts=opts.SplitLineOpts(is_show=True)),
@@ -96,7 +97,7 @@ bar_dir = (
                    color=JsCode("params => params.value >= 0 ? '#2ca02c' : '#d62728'")))
     .set_global_opts(
         title_opts=opts.TitleOpts(title="多空方向盈亏对比(单位)"),
-        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18)],
+        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18), opts.DataZoomOpts(type_="slider", orient="vertical", yaxis_index=0)],
 
         yaxis_opts=opts.AxisOpts(name="累计盈亏 (单位)", splitline_opts=opts.SplitLineOpts(is_show=True)),
         tooltip_opts=opts.TooltipOpts(trigger="axis"))
@@ -110,7 +111,7 @@ bar_dist = (
     .add_yaxis("笔数", [int(v) for v in bins.values])
     .set_global_opts(
         title_opts=opts.TitleOpts(title="单笔盈亏分布"),
-        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18)],
+        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18), opts.DataZoomOpts(type_="slider", orient="vertical", yaxis_index=0)],
 
         xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=45, interval=0, font_size=10)),
         yaxis_opts=opts.AxisOpts(name="笔数"),
@@ -152,7 +153,7 @@ line_roll_wr = (
                markline_opts=opts.MarkLineOpts(data=[opts.MarkLineItem(y=50, name="50%线")]))
     .set_global_opts(
         title_opts=opts.TitleOpts(title="滚动3个月窗口: 胜率趋势(样本>=10笔)"),
-        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18)],
+        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18), opts.DataZoomOpts(type_="slider", orient="vertical", yaxis_index=0)],
 
         yaxis_opts=opts.AxisOpts(name="胜率(%)", min_=30, max_=75),
         tooltip_opts=opts.TooltipOpts(trigger="axis"))
@@ -166,7 +167,7 @@ line_roll_rr = (
                markline_opts=opts.MarkLineOpts(data=[opts.MarkLineItem(y=1.0, name="盈亏比1.0")]))
     .set_global_opts(
         title_opts=opts.TitleOpts(title="滚动3个月窗口: 盈亏比趋势(样本>=10笔)"),
-        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18)],
+        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18), opts.DataZoomOpts(type_="slider", orient="vertical", yaxis_index=0)],
 
         yaxis_opts=opts.AxisOpts(name="盈亏比", min_=0, max_=2),
         tooltip_opts=opts.TooltipOpts(trigger="axis"))
@@ -180,7 +181,7 @@ bar_roll = (
                    color=JsCode("params => params.value >= 0 ? '#2ca02c' : '#d62728'")))
     .set_global_opts(
         title_opts=opts.TitleOpts(title="滚动3月盈亏(单位)"),
-        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18)],
+        datazoom_opts=[opts.DataZoomOpts(type_="inside"), opts.DataZoomOpts(type_="slider", height=18), opts.DataZoomOpts(type_="slider", orient="vertical", yaxis_index=0)],
 
         yaxis_opts=opts.AxisOpts(name="盈亏 (单位)", splitline_opts=opts.SplitLineOpts(is_show=True)),
         tooltip_opts=opts.TooltipOpts(trigger="axis"))

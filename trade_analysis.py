@@ -82,7 +82,8 @@ if others_sum != 0:
     by_symbol = pd.concat([by_symbol, pd.Series({"其他": others_sum})]).sort_values()
 fig, ax = plt.subplots(figsize=(10, 5))
 colors = ["#d62728" if v < 0 else "#2ca02c" for v in by_symbol.values]
-ax.barh(by_symbol.index, by_symbol.values, color=colors)
+_disp = [str(x).replace("USDT", "") if str(x).endswith("USDT") else str(x) for x in by_symbol.index]
+ax.barh(_disp, by_symbol.values, color=colors)
 ax.set_title("各品种累计盈亏(单位, 主流资产+其他)")
 ax.set_xlabel("累计盈亏 (单位)")
 for i, v in enumerate(by_symbol.values):
